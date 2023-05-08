@@ -1,0 +1,25 @@
+# Directories
+node_modules/
+dist/
+build/
+coverage/
+
+# Environment files
+.env
+
+# Logs
+logs/
+*.log
+
+# Dependency lock files
+package-lock.json
+yarn.lock
+
+# Editor files
+.idea/
+
+# OS-generated files
+.DS_Store
+Thumbs.db
+
+/.clinic
