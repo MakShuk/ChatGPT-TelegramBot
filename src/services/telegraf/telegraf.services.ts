@@ -1,5 +1,7 @@
 import { Telegraf } from 'telegraf';
 import { message } from 'telegraf/filters';
+import { l } from '../logger/logger.service';
+import { after } from 'node:test';
 
 export class TelegrafServices {
 	bot: Telegraf;
@@ -18,19 +20,16 @@ export class TelegrafServices {
 			try {
 				await handlerFunc(context);
 			} catch (e: any) {
-				console.log(`Error while string message' e.messag`);
+				l.error(`Comand ${comand} Error while message ${e.messag}`);
 			}
 		});
 	}
-	async on(): Promise<void> {
+	async speechToText(handlerFunc: (ctx: any) => void): Promise<void> {
 		this.bot.on(message('voice'), async (context) => {
 			try {
-				const userId = context.message.from.id;
-				await context.reply(JSON.stringify(context.message.voice, null, 2));
-				const link = await context.telegram.getFileLink(context.message.voice.file_id);
-				await context.reply(JSON.stringify(link, null, 2));
+				await handlerFunc(context);
 			} catch (e: any) {
-				console.log('Error while voice message', e.message);
+				l.error(`Error while voice message ${e.messag}`);
 			}
 		});
 	}

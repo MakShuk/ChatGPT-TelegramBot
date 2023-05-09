@@ -12,10 +12,18 @@ const idComand = async (context: any): Promise<void> => {
 	await context.reply(JSON.stringify(context.message.from.id, null, 2));
 };
 
+const voiceAction = async (context: any): Promise<void> => {
+	const userId = context.message.from.id;
+	await context.reply(JSON.stringify(context.message.voice, null, 2));
+	const link = await context.telegram.getFileLink(context.message.voice.file_id);
+	await context.reply(JSON.stringify(link, null, 2));
+};
+
 const start = async (): Promise<void> => {
 	const maksLifeBot = new TelegrafServices(config.get('TELEGRAM_TOKEN'));
 	maksLifeBot.comand(startComand, 'start');
-	maksLifeBot.comand(startComand, 'id');
+	maksLifeBot.comand(idComand, 'id');
+	maksLifeBot.speechToText(voiceAction);
 };
 
 start();
