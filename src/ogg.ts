@@ -18,7 +18,7 @@ class OggConvector {
 			return new Promise((resolve) => {
 				const stream = createWriteStream(oggPath);
 				response.data.pipe(stream);
-				stream.on('finish', () => resolve(oggPath));
+				stream.on('finish', () => resolve());
 			});
 		} catch (e: any) {
 			console.log(e.message);
