@@ -37,4 +37,12 @@ export class FileService {
 	createWriteStream(): WriteStream {
 		return createWriteStream(this.path);
 	}
+
+	delete(): Promise<string> {
+		return new Promise((resolve, reject) => {
+			fs.unlink(this.path)
+				.then(() => resolve(`File delete ${this.path}`))
+				.catch((err) => reject(err));
+		});
+	}
 }

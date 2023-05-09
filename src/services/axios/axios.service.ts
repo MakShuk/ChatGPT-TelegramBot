@@ -35,5 +35,11 @@ export class AxiosService {
 	async getStreamWriteFile(stream: WriteStream): Promise<void> {
 		const response = await this.get('stream');
 		response.data.pipe(stream);
+		await new Promise((resolve) => {
+			response.data.on('end', () => {
+				console.log('Запись в файл завершена!');
+				resolve('end');
+			});
+		});
 	}
 }

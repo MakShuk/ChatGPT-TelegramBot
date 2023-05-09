@@ -20,7 +20,7 @@ export class TelegrafServices {
 			try {
 				await handlerFunc(context);
 			} catch (e: any) {
-				l.error(`Comand ${comand} Error while message ${e.messag}`);
+				l.error(`Comand ${comand} Error while message ${e}`);
 			}
 		});
 	}
@@ -29,7 +29,7 @@ export class TelegrafServices {
 			try {
 				await handlerFunc(context);
 			} catch (e: any) {
-				l.error(`Error while voice message ${e.messag}`);
+				l.error(`Error while voice message ${e}`);
 			}
 		});
 	}
