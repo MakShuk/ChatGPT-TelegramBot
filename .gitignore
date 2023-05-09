@@ -4,6 +4,7 @@ dist/
 build/
 coverage/
 config/
+voices/
 
 # Environment files
 .env
