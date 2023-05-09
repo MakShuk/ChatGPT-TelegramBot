@@ -1,8 +1,26 @@
-import { Telegraf } from 'telegraf';
-import { message } from 'telegraf/filters';
+//import { Telegraf } from 'telegraf';
+//import { message } from 'telegraf/filters';
 import config from 'config';
-import { ogg } from './ogg.js';
+//import { ogg } from './ogg.js';
 
+import { TelegrafServices } from './services/telegraf/telegraf.services';
+
+const startComand = async (context: any): Promise<void> => {
+	await context.reply(JSON.stringify(context.message, null, 2));
+};
+const idComand = async (context: any): Promise<void> => {
+	await context.reply(JSON.stringify(context.message.from.id, null, 2));
+};
+
+const start = async (): Promise<void> => {
+	const maksLifeBot = new TelegrafServices(config.get('TELEGRAM_TOKEN'));
+	maksLifeBot.comand(startComand, 'start');
+	maksLifeBot.comand(startComand, 'id');
+};
+
+start();
+
+/* 
 const bot = new Telegraf(config.get('TELEGRAM_TOKEN'));
 
 bot.on(message('voice'), async (context) => {
@@ -21,6 +39,6 @@ bot.command('start', async (context) => {
 });
 
 bot.launch();
-
-process.once('SIGINT', () => bot.stop('SIGINT'));
-process.once('SIGTERM', () => bot.stop('SIGTERM'));
+ */
+/* process.once('SIGINT', () => bot.stop('SIGINT'));
+process.once('SIGTERM', () => bot.stop('SIGTERM')); */
