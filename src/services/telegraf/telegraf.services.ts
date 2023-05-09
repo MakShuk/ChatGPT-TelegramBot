@@ -24,7 +24,7 @@ export class TelegrafServices {
 			}
 		});
 	}
-	async speechToText(handlerFunc: (ctx: any) => void): Promise<void> {
+	async speechToAction(handlerFunc: (ctx: any) => void): Promise<void> {
 		this.bot.on(message('voice'), async (context) => {
 			try {
 				await handlerFunc(context);
