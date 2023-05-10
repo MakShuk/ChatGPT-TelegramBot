@@ -1,14 +1,16 @@
 import { Configuration, OpenAIApi } from 'openai';
 import config from 'config';
 
-export class OpenAi {
+class OpenAi {
 	private configuration: Configuration;
 	private openai: OpenAIApi;
 
-	constructor(apiKey: string) {
+	constructor() {
 		this.configuration = new Configuration({
-			apiKey,
+			apiKey: config.get('CHATGPT_TOKEN'),
 		});
 		this.openai = new OpenAIApi(this.configuration);
 	}
 }
+
+export const openai = new OpenAi();
