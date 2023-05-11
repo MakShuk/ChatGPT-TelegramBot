@@ -33,11 +33,18 @@ const voiceAction = async (context: any): Promise<void> => {
 	await context.reply(code(openaiAnswer.content));
 };
 
+const messageAction = async (context: any): Promise<void> => {
+	await context.reply(code('Думаю над ответом...'));
+	const openaiAnswer = await openai.chat(context.message.text);
+	await context.reply(code(openaiAnswer.content));
+};
+
 const start = async (): Promise<void> => {
 	const maksLifeBot = new TelegrafServices(config.get('TELEGRAM_TOKEN'));
 	maksLifeBot.comand(startComand, 'start');
 	maksLifeBot.comand(idComand, 'id');
 	maksLifeBot.speechToAction(voiceAction);
+	maksLifeBot.massageToAction(messageAction);
 };
 
 start();

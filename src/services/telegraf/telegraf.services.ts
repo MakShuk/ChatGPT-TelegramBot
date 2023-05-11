@@ -34,6 +34,16 @@ export class TelegrafServices {
 		});
 	}
 
+	async massageToAction(handlerFunc: (ctx: any) => void): Promise<void> {
+		this.bot.on('message', async (context) => {
+			try {
+				await handlerFunc(context);
+			} catch (e: any) {
+				l.error(`Error while voice message ${e}`);
+			}
+		});
+	}
+
 	useSession(): void {
 		this.bot.use(session());
 	}
