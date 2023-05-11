@@ -1,4 +1,4 @@
-import { Telegraf } from 'telegraf';
+import { Telegraf, session } from 'telegraf';
 import { message } from 'telegraf/filters';
 import { l } from '../logger/logger.service';
 import { after } from 'node:test';
@@ -32,5 +32,9 @@ export class TelegrafServices {
 				l.error(`Error while voice message ${e}`);
 			}
 		});
+	}
+
+	useSession(): void {
+		this.bot.use(session());
 	}
 }

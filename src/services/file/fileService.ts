@@ -1,5 +1,5 @@
 import fs from 'fs/promises';
-import { WriteStream, createWriteStream } from 'fs';
+import { WriteStream, createWriteStream, createReadStream, ReadStream } from 'fs';
 import { resolve } from 'path';
 
 export class FileService {
@@ -36,6 +36,10 @@ export class FileService {
 
 	createWriteStream(): WriteStream {
 		return createWriteStream(this.path);
+	}
+
+	createReadStream(): ReadStream {
+		return createReadStream(this.path);
 	}
 
 	delete(): Promise<string> {
