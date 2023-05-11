@@ -1,5 +1,6 @@
 import { ChatCompletionRequestMessage, Configuration, OpenAIApi } from 'openai';
 import config from 'config';
+import { IMessage } from './openai.service.interface';
 import { ReadStream } from 'node:fs';
 
 class OpenAi {
@@ -13,9 +14,8 @@ class OpenAi {
 		this.openai = new OpenAIApi(this.configuration);
 	}
 
-	async chat(text: string, role: 'system' | 'user' | 'assistant' = 'user'): Promise<any> {
+	async chat(messages: any): Promise<any> {
 		try {
-			const messages = [{ role: role, content: text }];
 			const responce = await this.openai.createChatCompletion({ model: 'gpt-3.5-turbo', messages });
 			return responce.data.choices[0].message;
 		} catch (error) {
@@ -31,6 +31,20 @@ class OpenAi {
 			console.log(`Error while transcription: ${error}`);
 			return `Error while transcription: ${error}`;
 		}
+	}
+
+	getUserMessage(message: string): IMessage {
+		return {
+			role: 'user',
+			content: message,
+		};
+	}
+
+	getAssistantMessage(message: string): IMessage {
+		return {
+			role: 'assistant',
+			content: message,
+		};
 	}
 }
 

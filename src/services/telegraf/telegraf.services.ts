@@ -34,8 +34,8 @@ export class TelegrafServices {
 		});
 	}
 
-	async massageToAction(handlerFunc: (ctx: any) => void): Promise<void> {
-		this.bot.on('message', async (context) => {
+	async textToAction(handlerFunc: (ctx: any) => void): Promise<void> {
+		this.bot.on(message('text'), async (context) => {
 			try {
 				await handlerFunc(context);
 			} catch (e: any) {

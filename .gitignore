@@ -24,3 +24,7 @@ yarn.lock
 .DS_Store
 Thumbs.db
 
+#media 
+.ogg
+.mp3
+

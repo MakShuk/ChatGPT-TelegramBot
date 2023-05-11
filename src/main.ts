@@ -1,5 +1,4 @@
 import config from 'config';
-
 import { TelegrafServices } from './services/telegraf/telegraf.services';
 import { FileService } from './services/file/fileService';
 import { l } from './services/logger/logger.service';
@@ -9,14 +8,23 @@ import { openai } from './services/openai/openai.service';
 import { code } from 'telegraf/format';
 
 const startComand = async (context: any): Promise<void> => {
-	await context.reply('bot run');
+	context.session ??= {};
+	context.session.message ??= [];
+	context.session.message = [];
+	//	l.warn(context.session.message);
+	await context.reply('Отравте голосовое и текствое сообщение');
 };
-const idComand = async (context: any): Promise<void> => {
-	await context.reply(JSON.stringify(context.message.from.id, null, 2));
+const newContext = async (context: any): Promise<void> => {
+	context.session ??= {};
+	context.session.message ??= [];
+	context.session.message = [];
+	//	l.warn(context.session.message);
+	await context.reply(code('Контекст сброшен'));
 };
 
 const voiceAction = async (context: any): Promise<void> => {
 	await context.reply(code('Думаю над ответом...'));
+
 	const userId = context.message.from.id;
 	const oggFile = new FileService(`${userId}.ogg`, './../../../voices');
 	const mp3File = new FileService(`${userId}.mp3`, './../../../voices');
@@ -26,25 +34,42 @@ const voiceAction = async (context: any): Promise<void> => {
 	const oggRespoce = new AxiosService(link);
 	await oggRespoce.getStreamWriteFile(stream);
 	await convector.convertToMp3(oggFile.path, mp3File.path);
+
 	l.info(await oggFile.delete());
 	const text = await openai.transcription(mp3File.createReadStream());
 	l.info(await mp3File.delete());
-	const openaiAnswer = await openai.chat(text);
+
+	context.session ??= {};
+	context.session.messages ??= [];
+
+	context.session.messages.push(openai.getUserMessage(text));
+
+	const openaiAnswer = await openai.chat(context.session.messages);
+
+	context.session.messages.push(openai.getAssistantMessage(openaiAnswer.content));
+
 	await context.reply(code(openaiAnswer.content));
 };
 
 const messageAction = async (context: any): Promise<void> => {
 	await context.reply(code('Думаю над ответом...'));
-	const openaiAnswer = await openai.chat(context.message.text);
+	context.session ??= {};
+	context.session.messages ??= [];
+	context.session.messages.push(openai.getUserMessage(context.message.text));
+
+	const openaiAnswer = await openai.chat(context.session.messages);
+	context.session.messages.push(openai.getAssistantMessage(openaiAnswer.content));
+
 	await context.reply(code(openaiAnswer.content));
 };
 
 const start = async (): Promise<void> => {
 	const maksLifeBot = new TelegrafServices(config.get('TELEGRAM_TOKEN'));
+	maksLifeBot.useSession();
 	maksLifeBot.comand(startComand, 'start');
-	maksLifeBot.comand(idComand, 'id');
+	maksLifeBot.comand(newContext, 'new');
 	maksLifeBot.speechToAction(voiceAction);
-	maksLifeBot.massageToAction(messageAction);
+	maksLifeBot.textToAction(messageAction);
 };
 
 start();
