@@ -1,5 +1,5 @@
 import { code } from 'telegraf/format';
-import { checkTime } from './checkTime';
+import { checkTime, splitTextAndCode } from './utils';
 import { FileService } from '../services/file/fileService';
 import { AxiosService } from '../services/axios/axios.service';
 import { convector } from '../services/ogg/oggConverter';
@@ -38,5 +38,5 @@ export const voiceAction = async (context: any): Promise<void> => {
 
 	context.session.messages.push(openai.getAssistantMessage(openaiAnswer.content));
 
-	await context.reply(openaiAnswer.content);
+	await splitTextAndCode(openaiAnswer.content, context);
 };
