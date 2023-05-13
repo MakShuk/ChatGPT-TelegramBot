@@ -1,7 +1,6 @@
 import { Telegraf, session } from 'telegraf';
 import { message } from 'telegraf/filters';
 import { l } from '../logger/logger.service';
-import { after } from 'node:test';
 
 export class TelegrafServices {
 	bot: Telegraf;
@@ -29,7 +28,7 @@ export class TelegrafServices {
 			try {
 				await handlerFunc(context);
 			} catch (e: any) {
-				l.error(`Error while voice message ${e}`);
+				l.error(`Error while speechToAction message ${e}`);
 			}
 		});
 	}
@@ -39,7 +38,7 @@ export class TelegrafServices {
 			try {
 				await handlerFunc(context);
 			} catch (e: any) {
-				l.error(`Error while voice message ${e}`);
+				l.error(`Error while textToAction message ${e}`);
 			}
 		});
 	}
