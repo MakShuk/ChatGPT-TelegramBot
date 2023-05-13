@@ -6,12 +6,14 @@ coverage/
 config/
 voices/
 
+
 # Environment files
 .env
 
 # Logs
 logs/
 *.log
+log.txt
 
 # Dependency lock files
 package-lock.json

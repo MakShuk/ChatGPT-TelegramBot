@@ -1,5 +1,5 @@
 import { code } from 'telegraf/format';
-import { checkTime, splitTextAndCode } from './utils';
+import { checkTime, saveLog, splitTextAndCode } from './utils';
 import { FileService } from '../services/file/fileService';
 import { AxiosService } from '../services/axios/axios.service';
 import { convector } from '../services/ogg/oggConverter';
@@ -33,6 +33,7 @@ export const voiceAction = async (context: any): Promise<void> => {
 	l.info(await mp3File.delete());
 
 	context.session.messages.push(openai.getUserMessage(text));
+	saveLog(context.message);
 
 	const openaiAnswer = await openai.chat(context.session.messages);
 

@@ -49,4 +49,12 @@ export class FileService {
 				.catch((err) => reject(err));
 		});
 	}
+	async appendFile(text: string): Promise<void> {
+		try {
+			await fs.appendFile(this.fileName, `${text}\n`);
+			console.log('Лог сохранён!');
+		} catch (error) {
+			console.error('Ошибка при добавлении в файл:', error);
+		}
+	}
 }

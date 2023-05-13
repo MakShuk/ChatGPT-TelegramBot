@@ -1,4 +1,5 @@
 import { code } from 'telegraf/format';
+import { FileService } from '../services/file/fileService';
 
 export const checkTime = (context: any): boolean =>
 	context.message.date >= context.session.time
@@ -14,4 +15,18 @@ export const splitTextAndCode = async (messageText: string, context: any): Promi
 			lines[i] ? await context.reply(code(lines[i])) : null;
 		}
 	}
+};
+
+export const saveLog = async (message: any): Promise<void> => {
+	const logFile = new FileService(`log.txt`, './../../../log/');
+	let truncateString = 'Voice message...';
+	if (message.text !== undefined) {
+		truncateString = message.text.length > 100 ? message.text.slice(0, 100) + '...' : message.text;
+	}
+	const log = {
+		id: message.from.id || null,
+		name: message.from.first_name || null,
+		message: truncateString || null,
+	};
+	logFile.appendFile(`${JSON.stringify(log)}/n`);
 };

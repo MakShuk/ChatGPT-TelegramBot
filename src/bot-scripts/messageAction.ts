@@ -1,5 +1,5 @@
 import { code } from 'telegraf/format';
-import { checkTime, splitTextAndCode } from './utils';
+import { checkTime, saveLog, splitTextAndCode } from './utils';
 import { openai } from '../services/openai/openai.service';
 
 export const messageAction = async (context: any): Promise<void> => {
@@ -14,7 +14,7 @@ export const messageAction = async (context: any): Promise<void> => {
 	await context.reply(code('Думаю над ответом...'));
 
 	context.session.messages.push(openai.getUserMessage(context.message.text));
-
+	saveLog(context.message);
 	const openaiAnswer = await openai.chat(context.session.messages);
 	context.session.messages.push(openai.getAssistantMessage(openaiAnswer.content));
 	await splitTextAndCode(openaiAnswer.content, context);
