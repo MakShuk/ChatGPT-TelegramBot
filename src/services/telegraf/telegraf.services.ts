@@ -43,6 +43,16 @@ export class TelegrafServices {
 		});
 	}
 
+	async fileToAction(handlerFunc: (ctx: any) => void): Promise<void> {
+		this.bot.on('document', async (context) => {
+			try {
+				await handlerFunc(context);
+			} catch (e: any) {
+				l.error(`Error while textToAction message ${e}`);
+			}
+		});
+	}
+
 	useSession(): void {
 		this.bot.use(session());
 	}

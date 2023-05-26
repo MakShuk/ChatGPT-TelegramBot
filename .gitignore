@@ -4,7 +4,8 @@ dist/
 build/
 coverage/
 config/
-voices/
+/voices/*
+/documents/*
 
 
 # Environment files

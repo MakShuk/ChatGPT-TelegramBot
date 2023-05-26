@@ -25,9 +25,19 @@ export class FileService {
 
 	async readJsonFile(): Promise<any> {
 		try {
-			const data = await fs.readFile(this.fileName, { encoding: 'utf-8' });
+			const data = await fs.readFile(this.path, { encoding: 'utf-8' });
 			const jsonData = JSON.parse(data);
 			return jsonData;
+		} catch (err) {
+			console.error(err);
+			return null;
+		}
+	}
+
+	async readFile(): Promise<any> {
+		try {
+			const data = await fs.readFile(this.path, { encoding: 'utf-8' });
+			return data;
 		} catch (err) {
 			console.error(err);
 			return null;

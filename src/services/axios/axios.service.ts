@@ -3,9 +3,7 @@ import { l } from '../logger/logger.service';
 import { WriteStream } from 'fs';
 
 export class AxiosService {
-	constructor(private url: string) {
-		this.url = url;
-	}
+	constructor(private readonly url: string) {}
 
 	async get(responseType?: ResponseType): Promise<any> {
 		try {
@@ -33,11 +31,11 @@ export class AxiosService {
 	}
 
 	async getStreamWriteFile(stream: WriteStream): Promise<void> {
-		const response = await this.get('stream');
-		response.data.pipe(stream);
+		const responseStream = await this.get('stream');
+		responseStream.data.pipe(stream);
 		await new Promise((resolve) => {
-			response.data.on('end', () => {
-				console.log('Запись в файл завершена!');
+			responseStream.data.on('end', () => {
+				console.log('AxiosService: File writing complete');
 				resolve('end');
 			});
 		});

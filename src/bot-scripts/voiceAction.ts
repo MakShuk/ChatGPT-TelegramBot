@@ -28,9 +28,9 @@ export const voiceAction = async (context: any): Promise<void> => {
 	await oggRespoce.getStreamWriteFile(stream);
 	await convector.convertToMp3(oggFile.path, mp3File.path);
 
-	l.info(await oggFile.delete());
+	await oggFile.delete();
 	const text = await openai.transcription(mp3File.createReadStream());
-	l.info(await mp3File.delete());
+	await mp3File.delete();
 
 	context.session.messages.push(openai.getUserMessage(text));
 	saveLog(context.message);
