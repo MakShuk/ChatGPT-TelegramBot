@@ -7,7 +7,6 @@ export const checkTime = (context: any): boolean =>
 		: false;
 
 export const splitTextAndCode = async (messageText: string, context: any): Promise<void> => {
-	console.log(messageText);
 	const lines = messageText.split('```');
 	for (let i = 0; i <= lines.length; i++) {
 		if (i === 0 || i % 2 === 0) {

@@ -4,6 +4,11 @@ import { openai } from '../services/openai/openai.service';
 import { FileService } from '../services/file/fileService';
 import { AxiosService } from '../services/axios/axios.service';
 
+const defaultСontext = `Сделай этот код лучше.
+Выведи пример правильного кода. Объясни внесенные правки в виде отдельного списка по пунктам,
+отметь номер правки в коде. Проверь правильность названий переменных, найди все опечатки если они есть.
+Проверь, что все переменные написаны в стиле Camel case;`;
+
 export const fileAction = async (ctx: any): Promise<void> => {
 	ctx.session ??= {};
 	ctx.session.messages ??= [];
@@ -17,8 +22,7 @@ export const fileAction = async (ctx: any): Promise<void> => {
 	await ctx.reply(code('Думаю над ответом...'));
 
 	const userId = ctx.message.from.id;
-	console.log('UserID: ', ctx.message.document.file_id);
-	console.log('ctx.message: ', ctx.message);
+
 	const document = new FileService(
 		`${userId}-${ctx.message.document.file_name}`,
 		'./../../../document',
@@ -31,11 +35,7 @@ export const fileAction = async (ctx: any): Promise<void> => {
 
 	const contentInFile = await document.readFile();
 	document.delete();
-	const serviceMessages = `Сделай этот код лучше.
-	Выведи пример правильного кода. Объясни внесенные правки в виде отдельного списка по пунктам,
-   отметь номер правки в коде.
-	Проверь правильность названий переменных, найди все опечатки если они есть.
-	Проверь, что все переменные написаны в стиле Camel case;`;
+	const serviceMessages = ctx.message.caption || defaultСontext;
 
 	ctx.session.messages.push(openai.getAssistantMessage(serviceMessages));
 	ctx.session.messages.push(openai.getUserMessage(contentInFile));
