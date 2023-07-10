@@ -16,16 +16,22 @@ class OpenAi {
 
 	async chat(messages: any): Promise<any> {
 		try {
-			const responce = await this.openai.createChatCompletion({ model: 'gpt-3.5-turbo', messages });
+			const responce = await this.openai.createChatCompletion({
+				model: 'gpt-3.5-turbo',
+				messages,
+				/*	max_tokens: 50,
+				temperature: 0.5, */
+			});
 			return responce.data.choices[0].message;
 		} catch (error) {
 			console.log(`Error while transcription: ${error}`);
 		}
 	}
 
-	async transcription(readStream: any): Promise<string> {
+	async transcription(readStream: ReadStream): Promise<string> {
 		try {
-			const responce = await this.openai.createTranscription(readStream, 'whisper-1');
+			const stream = readStream as unknown as File;
+			const responce = await this.openai.createTranscription(stream, 'whisper-1');
 			return responce.data.text;
 		} catch (error) {
 			console.log(`Error while transcription: ${error}`);

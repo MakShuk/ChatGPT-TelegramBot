@@ -7,7 +7,7 @@ import { fileAction } from './bot-scripts/fileAction';
 
 const start = async (): Promise<void> => {
 	const maksLifeBot = new TelegrafServices(config.get('TELEGRAM_TOKEN'));
-	maksLifeBot.useSession();
+	maksLifeBot.init();
 	maksLifeBot.comand(startCommand, 'start');
 	maksLifeBot.comand(newContext, 'new');
 	maksLifeBot.speechToAction(voiceAction);

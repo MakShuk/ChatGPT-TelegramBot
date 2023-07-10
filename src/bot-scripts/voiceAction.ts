@@ -4,7 +4,6 @@ import { FileService } from '../services/file/fileService';
 import { AxiosService } from '../services/axios/axios.service';
 import { convector } from '../services/ogg/oggConverter';
 import { openai } from '../services/openai/openai.service';
-import { l } from '../services/logger/logger.service';
 
 export const voiceAction = async (context: any): Promise<void> => {
 	context.session ??= {};
