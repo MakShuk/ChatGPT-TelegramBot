@@ -25,6 +25,7 @@ class OpenAi {
 			return responce.data.choices[0].message;
 		} catch (error) {
 			console.log(`Error while transcription: ${error}`);
+			return { content: ` OpenAi_API ${error}` };
 		}
 	}
 

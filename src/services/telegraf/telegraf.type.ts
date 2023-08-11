@@ -23,3 +23,8 @@ export type FileContext = NarrowedContext<
 		update_id: number;
 	}
 >;
+
+export type PhotoContext = NarrowedContext<
+	Context<Update>,
+	Update.MessageUpdate<Record<'photo', {}> & Message.PhotoMessage>
+>;

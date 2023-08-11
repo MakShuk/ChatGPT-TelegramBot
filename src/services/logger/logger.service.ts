@@ -1,15 +1,14 @@
 import { Logger, ILogObj } from 'tslog';
-import { ILogger } from './logger.interface';
 
-export class LoggerService implements ILogger {
-	logger: Logger<ILogObj>;
+export class LoggerService {
+	private logger: Logger<ILogObj>;
 
-	constructor() {
-		this.logger = new Logger({ hideLogPositionForProduction: true, type: 'pretty' });
-	}
-
-	log(...args: unknown[]): void {
-		this.logger.info(...args);
+	constructor(name?: string) {
+		this.logger = new Logger({
+			hideLogPositionForProduction: true,
+			type: 'pretty',
+			name: name,
+		});
 	}
 
 	error(...args: unknown[]): void {
@@ -19,12 +18,20 @@ export class LoggerService implements ILogger {
 	warn(...args: unknown[]): void {
 		this.logger.warn(...args);
 	}
+
 	info(...args: unknown[]): void {
 		this.logger.info(...args);
 	}
+
 	trace(...args: unknown[]): void {
 		this.logger.trace(...args);
 	}
-}
 
-export const l = new LoggerService();
+	test(): void {
+		const messege = 'Test message';
+		this.logger.info(messege);
+		this.logger.trace(messege);
+		this.logger.error(messege);
+		this.logger.warn(messege);
+	}
+}

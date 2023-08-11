@@ -4,6 +4,7 @@ import { voiceAction } from './bot-scripts/voiceAction';
 import { messageAction } from './bot-scripts/messageAction';
 import { newContext, startCommand } from './bot-scripts/comand';
 import { fileAction } from './bot-scripts/fileAction';
+import { imageAction } from './bot-scripts/imageAction';
 
 const start = async (): Promise<void> => {
 	const maksLifeBot = new TelegrafServices(config.get('TELEGRAM_TOKEN'));
@@ -13,6 +14,7 @@ const start = async (): Promise<void> => {
 	maksLifeBot.speechToAction(voiceAction);
 	maksLifeBot.textToAction(messageAction);
 	maksLifeBot.fileToAction(fileAction);
+	maksLifeBot.photoToAction(imageAction);
 };
 
 start();

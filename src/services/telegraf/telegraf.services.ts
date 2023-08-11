@@ -1,11 +1,11 @@
 import { Telegraf, session } from 'telegraf';
 import { message } from 'telegraf/filters';
 import { LoggerService } from '../logger/logger.service';
-import { FileContext, textContext, AudioContext } from './telegraf.type';
+import { FileContext, textContext, AudioContext, PhotoContext } from './telegraf.type';
 
 export class TelegrafServices {
 	bot: Telegraf;
-	logger = new LoggerService();
+	logger = new LoggerService('TelegrafServices');
 	constructor(token: string) {
 		this.bot = new Telegraf(token);
 	}
@@ -13,6 +13,7 @@ export class TelegrafServices {
 	async init(): Promise<void> {
 		this.bot.launch();
 		this.useSession();
+		this.logger.info('Бот запущен');
 	}
 
 	async sendImageToChat(chat_id: string | number, imgUrl: string, caption?: string): Promise<void> {
@@ -68,11 +69,21 @@ export class TelegrafServices {
 	}
 
 	async fileToAction(handlerFunc: (ctx: FileContext) => Promise<void>): Promise<void> {
-		this.bot.on('document', async (context) => {
+		this.bot.on(message('document'), async (context) => {
 			try {
 				await handlerFunc(context);
 			} catch (e) {
 				this.logger.error(`Error while textToAction message ${e}`);
+			}
+		});
+	}
+
+	async photoToAction(handlerFunc: (ctx: PhotoContext) => Promise<void>): Promise<void> {
+		this.bot.on(message('photo'), async (context) => {
+			try {
+				await handlerFunc(context);
+			} catch (e) {
+				this.logger.error(`Error while photoToAction message ${e}`);
 			}
 		});
 	}

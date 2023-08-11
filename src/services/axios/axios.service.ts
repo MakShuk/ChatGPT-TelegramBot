@@ -1,11 +1,12 @@
-import axios, { ResponseType } from 'axios';
-import { l } from '../logger/logger.service';
+import axios, { AxiosError, AxiosResponse, ResponseType } from 'axios';
+import { LoggerService } from '../logger/logger.service';
 import { WriteStream } from 'fs';
 
 export class AxiosService {
+	logger = new LoggerService('AxiosService');
 	constructor(private readonly url: string) {}
 
-	async get(responseType?: ResponseType): Promise<any> {
+	async get(responseType?: ResponseType): Promise<AxiosResponse | string> {
 		try {
 			const response = await axios({
 				method: 'get',
@@ -13,8 +14,13 @@ export class AxiosService {
 				responseType: responseType || 'json',
 			});
 			return response;
-		} catch (e: any) {
-			l.error(`Error get AxiosService method: ${e.messag}`);
+		} catch (e) {
+			if (e instanceof AxiosError) {
+				this.logger.error(e.name);
+				return e.name;
+			}
+			return `${e}`;
+			//throw Error('YandexService Erorr');
 		}
 	}
 
@@ -25,19 +31,23 @@ export class AxiosService {
 				url: this.url,
 				data: data,
 			});
-		} catch (e: any) {
-			l.error(`Error post AxiosService method: ${e.messag}`);
+		} catch (e) {
+			if (e instanceof AxiosError) {
+				this.logger.error(e.name);
+			}
 		}
 	}
 
 	async getStreamWriteFile(stream: WriteStream): Promise<void> {
 		const responseStream = await this.get('stream');
-		responseStream.data.pipe(stream);
-		await new Promise((resolve) => {
-			responseStream.data.on('end', () => {
-				console.log('AxiosService: File writing complete');
-				resolve('end');
+		if (typeof responseStream !== 'string') {
+			responseStream.data.pipe(stream);
+			await new Promise((resolve) => {
+				responseStream.data.on('end', () => {
+					this.logger.info('AxiosService: File writing complete');
+					resolve('end');
+				});
 			});
-		});
+		}
 	}
 }

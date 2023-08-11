@@ -4,10 +4,7 @@ import { openai } from '../services/openai/openai.service';
 import { FileService } from '../services/file/fileService';
 import { AxiosService } from '../services/axios/axios.service';
 
-const defaultСontext = `Сделай этот код лучше.
-Выведи пример правильного кода. Объясни внесенные правки в виде отдельного списка по пунктам,
-отметь номер правки в коде. Проверь правильность названий переменных, найди все опечатки если они есть.
-Проверь, что все переменные написаны в стиле Camel case;`;
+const defaultСontext = `Структурируй текст`;
 
 export const fileAction = async (ctx: any): Promise<void> => {
 	ctx.session ??= {};

@@ -5,8 +5,7 @@
   "main": "index.js",
   "type": "commonjs",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development nodemon",
-    "start": "cross-env NODE_ENV=production nodemon"
+    "start": "nodemon"
   },
   "keywords": [],
   "author": "Maksim Shuklin",
@@ -33,6 +32,7 @@
     "fluent-ffmpeg": "^2.1.2",
     "openai": "^3.2.1",
     "telegraf": "^4.12.2",
-    "tslog": "^4.8.2"
+    "tslog": "^4.8.2",
+    "tesseract.js": "^4.1.1"
   }
 }
